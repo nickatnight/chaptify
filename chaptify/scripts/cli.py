@@ -13,8 +13,8 @@ CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 class Clk:
     @staticmethod
-    def secho(msg, fg):
-        click.secho(msg, fg)
+    def secho(msg: str, fg: str):
+        click.secho(msg, fg=fg)
 
 
 @click.command()
@@ -34,7 +34,7 @@ def main(url: str):
     if missing_tracks := data.get("missing_tracks"):
         click.echo(
             MISSING_TRACKS_MSG.format(
-                tracks=f"\n".join(
+                tracks="\n".join(
                     [f"{emoji.emojize(':cross_mark:')} {mt}" for mt in missing_tracks]
                 )
             )
@@ -53,7 +53,6 @@ def main(url: str):
         tracks=len(tracks_to_add), name=data.get("playlist_name")
     )
     Clk.secho(msg, "green")
-
     chaptify.sp.playlist_replace_items(playlist_id, tracks_to_add)
 
 

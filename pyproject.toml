@@ -2,7 +2,7 @@
 name = "chaptify"
 version = "0.1.0"
 description = "Convert audio from chapter enabled YouTube videos to your Spotify playlist"
-authors = ["nickatnight <kay.muneee@gmail.com>"]
+authors = ["nickatnight <nickkelly.858@gmail.com>"]
 readme = "README.md"
 homepage = "https://github.com/nickatnight/chaptify"
 repository = "https://github.com/nickatnight/chaptify"
@@ -19,6 +19,8 @@ emoji = "^1.2.0"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = "^21.5b1"
+flake8 = "^3.9.2"
+coverage = "^5.5"
 
 [tool.poetry.scripts]
 chaptify = "chaptify.scripts.cli:main"

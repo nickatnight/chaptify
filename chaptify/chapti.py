@@ -1,4 +1,4 @@
-from typing import Dict, Union, List, Tuple
+from typing import Dict, Union
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -70,7 +70,7 @@ class Chaptify:
         try:
             with YoutubeDL(ydl_opts) as ydl:
                 info_dict = ydl.extract_info(url, download=False)
-        except Exception as e:
+        except Exception:
             return None
 
         return info_dict
@@ -90,7 +90,9 @@ class Chaptify:
 
         for item in pbar:
             track = clean_line(item)
-            track_search = " ".join(track.split("-"))
+            track_search = " ".join(
+                track.split("-")
+            ).lower()  # dumb down for simplicity
             pbar.set_description(f"fetching '{track}'...")
 
             track_id = self.search(track_search)
