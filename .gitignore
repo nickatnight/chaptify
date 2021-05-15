@@ -1,0 +1,10 @@
+# cache
+.cache
+__pycache__
+
+# config
+.vscode
+
+# build
+dist
+*.egg-info
