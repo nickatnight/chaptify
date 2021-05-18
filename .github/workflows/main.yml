@@ -1,13 +1,10 @@
-
----
 name: lint and test
 
 on: push
 
 jobs:
   lint-and-test:
-    runs-on: ubuntu-18.04
-    name: lint and test
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
