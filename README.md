@@ -3,7 +3,12 @@
     <small>Photo: https://daily.bandcamp.com</small>
 </p>
 <p align="center">
-    <a href="https://github.com/nickatnight/chaptify/actions"><img alt="GitHub Actions status" src="https://github.com/nickatnight/chaptify/actions/workflows/main.yml/badge.svg"></a>
+    <a href="https://github.com/nickatnight/chaptify/actions">
+        <img alt="GitHub Actions status" src="https://github.com/nickatnight/chaptify/actions/workflows/main.yml/badge.svg">
+    </a>
+    <a href="https://codecov.io/gh/nickatnight/chaptify">
+        <img src="https://codecov.io/gh/nickatnight/chaptify/branch/master/graph/badge.svg?token=E03I4QK6D9"/>
+    </a>
 </p>
 
 # chaptify :closed_book: :speaker:

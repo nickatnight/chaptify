@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 import click
 import emoji
@@ -16,10 +17,18 @@ CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 
-class Clk:
-    @staticmethod
-    def secho(msg: str, fg: str = "green"):
-        click.secho(msg, fg=fg)
+def _msg(data: Dict, ch: Chaptify):
+    """helper method for writing to stdout"""
+    msg = ADDING_TRACKS_MSG.format(
+        tracks=len(data.get("tracks_to_add")), name=data.get("playlist_name")
+    )
+    click.secho(msg, "green")
+    ch.playlist_replace_items(data.get("playlist_id"), data.get("tracks_to_add"))
+
+    msg = SUCESSFUL_PLAYLIST_CREATION.format(
+        collision=emoji.emojize(":collision:"), url=data.get("playlist_url")
+    )
+    click.echo(msg)
 
 
 @click.command()
@@ -30,45 +39,25 @@ def main(url: str):
     data = chaptify.process_youtube(ytdl_data)
 
     if not data:
-        Clk.secho(ERROR_FETCH_MSG, "red")
+        click.secho(ERROR_FETCH_MSG, "red")
         return
-
-    playlist_id = data.get("playlist_id")
-    tracks_to_add = data.get("tracks_to_add")
 
     if missing_tracks := data.get("missing_tracks"):
         click.echo(
-            MISSING_TRACKS_MSG.format(
-                tracks="\n".join(
-                    [f"{emoji.emojize(':cross_mark:')} {mt}" for mt in missing_tracks]
+            emoji.emojize(
+                MISSING_TRACKS_MSG.format(
+                    tracks="\n".join(
+                        list(map(lambda s: f":cross_mark: {s}", missing_tracks))
+                    )
                 )
             )
         )
 
         if click.confirm("Do you want to still continue?"):
-            msg = ADDING_TRACKS_MSG.format(
-                tracks=len(tracks_to_add), name=data.get("playlist_name")
-            )
-            Clk.secho(msg)
-            chaptify.playlist_replace_items(playlist_id, tracks_to_add)
-
-            msg = SUCESSFUL_PLAYLIST_CREATION.format(
-                collision=emoji.emojize(":collision:"), url=data.get("playlist_url")
-            )
-            click.echo(msg)
-
+            _msg(data, chaptify)
         return
 
-    msg = ADDING_TRACKS_MSG.format(
-        tracks=len(tracks_to_add), name=data.get("playlist_name")
-    )
-    Clk.secho(msg)
-    chaptify.playlist_replace_items(playlist_id, tracks_to_add)
-
-    msg = SUCESSFUL_PLAYLIST_CREATION.format(
-        collision=emoji.emojize(":collision:"), url=data.get("playlist_url")
-    )
-    Clk.secho(msg)
+    _msg(data, chaptify)
 
 
 if __name__ == "__main__":

@@ -25,10 +25,7 @@ jobs:
       - name: Black
         run: poetry run black . --check
       - name: run coverage
-        run: |
-          poetry run coverage run -m pytest
-          poetry run coverage report
-          poetry run coverage xml -o coverage.xml
+        run: poetry run pytest --cov-report xml --cov=chaptify tests/
       - name: Codecov
         uses: codecov/codecov-action@v1
         with:
