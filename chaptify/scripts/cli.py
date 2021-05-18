@@ -4,7 +4,12 @@ import click
 import emoji
 
 from ..chapti import Chaptify
-from ..enums import MISSING_TRACKS_MSG, ADDING_TRACKS_MSG, ERROR_FETCH_MSG
+from ..const import (
+    MISSING_TRACKS_MSG,
+    ADDING_TRACKS_MSG,
+    ERROR_FETCH_MSG,
+    SUCESSFUL_PLAYLIST_CREATION,
+)
 
 
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
@@ -13,7 +18,7 @@ CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
 class Clk:
     @staticmethod
-    def secho(msg: str, fg: str):
+    def secho(msg: str, fg: str = "green"):
         click.secho(msg, fg=fg)
 
 
@@ -44,16 +49,26 @@ def main(url: str):
             msg = ADDING_TRACKS_MSG.format(
                 tracks=len(tracks_to_add), name=data.get("playlist_name")
             )
-            Clk.secho(msg, "green")
-            chaptify.sp.playlist_replace_items(playlist_id, tracks_to_add)
+            Clk.secho(msg)
+            chaptify.playlist_replace_items(playlist_id, tracks_to_add)
+
+            msg = SUCESSFUL_PLAYLIST_CREATION.format(
+                collision=emoji.emojize(":collision:"), url=data.get("playlist_url")
+            )
+            click.echo(msg)
 
         return
 
     msg = ADDING_TRACKS_MSG.format(
         tracks=len(tracks_to_add), name=data.get("playlist_name")
     )
-    Clk.secho(msg, "green")
-    chaptify.sp.playlist_replace_items(playlist_id, tracks_to_add)
+    Clk.secho(msg)
+    chaptify.playlist_replace_items(playlist_id, tracks_to_add)
+
+    msg = SUCESSFUL_PLAYLIST_CREATION.format(
+        collision=emoji.emojize(":collision:"), url=data.get("playlist_url")
+    )
+    Clk.secho(msg)
 
 
 if __name__ == "__main__":

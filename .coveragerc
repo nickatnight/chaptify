@@ -1,0 +1,5 @@
+# .coveragerc
+[report]
+omit =
+    *virtualenvs*
+    *tests/test_*

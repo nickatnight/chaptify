@@ -1,10 +1,18 @@
+# system
+.DS_Store
+
 # cache
 .cache
 __pycache__
+.pytest_cache
 
 # config
 .vscode
+.coverage
 
 # build
 dist
 *.egg-info
+
+# misc
+htmlcov

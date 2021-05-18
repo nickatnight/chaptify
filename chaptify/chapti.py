@@ -1,23 +1,29 @@
-from typing import Dict, Union
+from typing import Dict, Union, List
 
-import spotipy
+from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from tqdm import tqdm
 from youtube_dl import YoutubeDL
 
-from .enums import DEFAULT_DESCRIPTION
+from .const import DEFAULT_DESCRIPTION, REDIRECT_URI, ScopeTypes
 from .utils import clean_line
 
 
 class Chaptify:
-    def __init__(self, client_id: str, client_secret: str):
+    def __init__(
+        self,
+        client_id: str,
+        client_secret: str,
+        redirect_uri: str = None,
+        scop: str = None,
+    ):
         auth_manager = SpotifyOAuth(
             client_id=client_id,
             client_secret=client_secret,
-            redirect_uri="http://localhost",
-            scope="playlist-modify-public",
+            redirect_uri=redirect_uri or REDIRECT_URI,
+            scope=scop or ScopeTypes.PLAYLIST_MODIFY_PUBLIC,
         )
-        self.sp = spotipy.Spotify(auth_manager=auth_manager)
+        self.sp = Spotify(auth_manager=auth_manager)
 
     def search(self, query: str) -> Union[None, str]:
         """search spotify for track name and return first hit
@@ -31,6 +37,16 @@ class Chaptify:
             return items[0].get("id")
         return None
 
+    def playlist_replace_items(
+        self, playlist_id: str, tracks_to_add: List[str]
+    ) -> None:
+        """replace all items in playlist with new ones
+
+        :param playlist_id:             id of playlist
+        :param tracks_to_add:           list of track ids
+        """
+        self.sp.playlist_replace_items(playlist_id, tracks_to_add)
+
     def user_id(self) -> str:
         """
         :return:                        logged in user id
@@ -43,7 +59,7 @@ class Chaptify:
         :param name:                    name to check
         :return:                        playlist data if exists, None otherwise
         """
-        playlists = self.sp.current_user_playlists().get("items")
+        playlists = self.sp.current_user_playlists().get("items", list())
         for playlist in playlists:
             if name == playlist.get("name"):
                 return playlist
@@ -86,6 +102,10 @@ class Chaptify:
         title = ytdl_data.get("title")
         playlist = self.get_or_create_playlist(title)
         chapters = ytdl_data.get("chapters")
+
+        if not chapters:
+            return None
+
         pbar = tqdm(chapters)
 
         for item in pbar:
@@ -106,4 +126,5 @@ class Chaptify:
             tracks_to_add=tracks_to_add,
             playlist_id=playlist.get("id"),
             playlist_name=playlist.get("name"),
+            playlist_url=playlist.get("external_urls", {}).get("spotify", ""),
         )
