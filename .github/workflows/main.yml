@@ -11,25 +11,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name : Set up python/poetry
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-        run: |
-          pip install -U pip
-          pip install poetry
-          poetry install
-        env:
-          POETRY_VIRTUALENVS_CREATE: true
-      - name: Black
-        run: poetry run black . --check
-      - name: run coverage
-        run: |
-          poetry run coverage run -m pytest
-          poetry run coverage report
-          poetry run coverage xml -o coverage.xml
-      - name: Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          file: coverage.xml
-          flags: unittests
+      # - name : Set up python/poetry
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.9
+      #   run: |
+      #     pip install -U pip
+      #     pip install poetry
+      #     poetry install
+      #   env:
+      #     POETRY_VIRTUALENVS_CREATE: true
+      # - name: Black
+      #   run: poetry run black . --check
+      # - name: run coverage
+      #   run: |
+      #     poetry run coverage run -m pytest
+      #     poetry run coverage report
+      #     poetry run coverage xml -o coverage.xml
+      # - name: Codecov
+      #   uses: codecov/codecov-action@v1
+      #   with:
+      #     file: coverage.xml
+      #     flags: unittests
