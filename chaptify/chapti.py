@@ -1,5 +1,6 @@
 from typing import Dict, Union, List
 
+from emoji import emojize
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from tqdm import tqdm
@@ -15,13 +16,13 @@ class Chaptify:
         client_id: str,
         client_secret: str,
         redirect_uri: str = None,
-        scop: str = None,
+        scope: str = ScopeTypes.PLAYLIST_MODIFY_PUBLIC,
     ):
         auth_manager = SpotifyOAuth(
             client_id=client_id,
             client_secret=client_secret,
             redirect_uri=redirect_uri or REDIRECT_URI,
-            scope=scop or ScopeTypes.PLAYLIST_MODIFY_PUBLIC,
+            scope=scope,
         )
         self.sp = Spotify(auth_manager=auth_manager)
 
@@ -36,6 +37,18 @@ class Chaptify:
         if items:
             return items[0].get("id")
         return None
+
+    def playlist_add_items(self, playlist_id, tracks_to_add: List[str]):
+        """append items to a playlist
+
+        :param playlist_id:             id of playlist
+        :param tracks_to_add:           list of track ids
+        """
+        self.sp.playlist_add_items(playlist_id, tracks_to_add)
+
+    def current_user_unfollow_playlist(self, playlist_id: str) -> None:
+        """delete playlist by id"""
+        self.sp.current_user_unfollow_playlist(playlist_id)
 
     def playlist_replace_items(
         self, playlist_id: str, tracks_to_add: List[str]
@@ -65,15 +78,19 @@ class Chaptify:
                 return playlist
         return None
 
-    def get_or_create_playlist(self, name: str) -> Dict:
+    def get_or_create_playlist(self, title: str, url: str) -> Dict:
         """
+        :param title:                   playlist title
         :return:                        playlist if exists, newly created playlist otherwise
         """
-        playlist = self.check_if_playlist_exists(name)
+        # TODO: add flag if created
+        playlist = self.check_if_playlist_exists(title)
         if playlist:
             return playlist
+
+        msg = DEFAULT_DESCRIPTION.format(url=url)
         return self.sp.user_playlist_create(
-            self.user_id(), name, description=DEFAULT_DESCRIPTION
+            self.user_id(), title, description=emojize(msg, variant="emoji_type")
         )
 
     def fetch_youtube(self, url: str) -> Dict:
@@ -99,32 +116,24 @@ class Chaptify:
         """
         missing_tracks = list()
         tracks_to_add = list()
-        title = ytdl_data.get("title")
-        playlist = self.get_or_create_playlist(title)
         chapters = ytdl_data.get("chapters")
 
         if not chapters:
             return None
 
-        pbar = tqdm(chapters)
+        with tqdm(iterable=chapters) as pbar:
+            for item in pbar:
+                track = clean_line(item)
+                track_search = " ".join(
+                    track.split("-")
+                ).lower()  # dumb down for simplicity
+                pbar.set_description(f"fetching '{track}'...")
 
-        for item in pbar:
-            track = clean_line(item)
-            track_search = " ".join(
-                track.split("-")
-            ).lower()  # dumb down for simplicity
-            pbar.set_description(f"fetching '{track}'...")
+                track_id = self.search(track_search)
+                if track_id:
+                    tracks_to_add.append(track_id)
+                else:
+                    missing_tracks.append(track)
 
-            track_id = self.search(track_search)
-            if track_id:
-                tracks_to_add.append(track_id)
-            else:
-                missing_tracks.append(track)
-
-        return dict(
-            missing_tracks=missing_tracks,
-            tracks_to_add=tracks_to_add,
-            playlist_id=playlist.get("id"),
-            playlist_name=playlist.get("name"),
-            playlist_url=playlist.get("external_urls", {}).get("spotify", ""),
-        )
+            pbar.set_description("Finished.")
+        return dict(missing_tracks=missing_tracks, tracks_to_add=tracks_to_add)

@@ -1,14 +1,12 @@
-import emoji
+DEFAULT_DESCRIPTION = """
+YouTube url: {url}
 
-
-DEFAULT_DESCRIPTION = f"""
-Made with {emoji.emojize(':red_heart:',variant='emoji_type')}
-
+Made with :red_heart:
 by nickatnight
 """
 
 MISSING_TRACKS_MSG = """
-The following tracks will not added to the playlist:
+The following {track_count} track(s) will not added to the playlist:
 
 {tracks}
 """
@@ -21,10 +19,14 @@ ERROR_FETCH_MSG = """
 There was an error with youtube-dl...exiting.
 """
 
-SUCESSFUL_PLAYLIST_CREATION = """
-{collision} Successfully created playlist. Can be viewed here:
+SUCESSFUL_PLAYLIST = """
+:collision: Successfully {action} playlist. Can be viewed here:
 
 {url}
+"""
+
+FOUND_ALL_TRACKS = """
+:check_mark: Great, found all tracks!
 """
 
 REDIRECT_URI = "http://localhost"

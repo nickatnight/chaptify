@@ -17,7 +17,7 @@ A simple cli to convert audio from [chapter](https://support.google.com/youtube/
 ## Reason?
 I needed an automated process to transfer 80s synthwave mixes I listen to from [YouTube](https://www.youtube.com/watch?v=2b9AqJimM-0), most of which were chapter enabled (new video feature from YT), to Spotify playlists.
 
-## Install (dev only for now)
+## Install (dev only)
 This package relies on `spotipy`, a lightweight python wrapper for Spotify api. See their [docs](https://spotipy.readthedocs.io/en/latest/) for installation or Spotify [developer](https://developer.spotify.com/documentation/general/guides/) guide for obtaining api keys
 
 1. clone this repo `$ git clone git@github.com:nickatnight/chaptify.git` and `cd chaptify`
@@ -30,3 +30,9 @@ This package relies on `spotipy`, a lightweight python wrapper for Spotify api. 
 4. run `$ chaptify --url=https://www.youtube.com/watch\?v\=Pz1a9MM-Vn4`
 
 ![alt text](https://i.imgur.com/AS3wTbW.gif "chaptify")
+
+## Limitations
+* obviously, this tool is limited to whats available on Spotify
+* only supports US market currently
+* works best with title tracks with variations of "name - artist"
+* there is no fancy algorithm or deep learning technique when using spotify search, just fetch me the first hit
