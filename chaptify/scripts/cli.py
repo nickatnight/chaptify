@@ -23,7 +23,7 @@ def _go(data: Dict, append: str, ch: Chaptify) -> None:
 
     :param data:                        processing data
     :param append:                      name of spotify playlist to append to
-    param ch:                           Chaptify instance
+    :param ch:                          Chaptify instance
     """
     playlist_id = data.get("id")
     tracks_to_add = data.get("tracks_to_add")
@@ -45,12 +45,9 @@ def _go(data: Dict, append: str, ch: Chaptify) -> None:
 
 @click.command()
 @click.argument("url")
-@click.option("-a", "--append", help="Append to a playlist.")
+@click.option("-a", "--append", help="Append to a playlist (by name).")
 def main(url: str, append: str):
-    """
-    :param url:                         youtube url of video
-    :param append:                      name of spotify playlist to append tracks to
-    """
+    """Youtube video link URL"""
     data = dict()
     chaptify = Chaptify(CLIENT_ID, CLIENT_SECRET)
     fetch_data = chaptify.fetch_youtube(url)

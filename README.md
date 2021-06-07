@@ -29,7 +29,8 @@ This package relies on `spotipy`, a lightweight python wrapper for Spotify api. 
 3. install in editable mode `$ pip install -e .`
 4. run `$ chaptify --url=https://www.youtube.com/watch\?v\=Pz1a9MM-Vn4`
 
-![alt text](https://i.imgur.com/AS3wTbW.gif "chaptify")
+<!-- https://imgur.com/a/9BDoKt5 -->
+![alt text](https://i.imgur.com/NqjM3SD.gif "chaptify")
 
 ## Limitations
 * obviously, this tool is limited to whats available on Spotify
