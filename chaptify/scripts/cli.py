@@ -55,7 +55,7 @@ def main(url: str, append: str):
     msg = FOUND_ALL_TRACKS
 
     if not process_data:
-        click.secho(ERROR_FETCH_MSG, "red")
+        click.secho(ERROR_FETCH_MSG, fg="red")
         return
 
     title = append or fetch_data.get("title", "")
