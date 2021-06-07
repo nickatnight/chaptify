@@ -24,6 +24,8 @@ jobs:
           POETRY_VIRTUALENVS_CREATE: true
       - name: Black
         run: poetry run black . --check
+      - name: Flake8
+        run: poetry run flake8 
       - name: run coverage
         run: poetry run pytest --cov-report xml --cov=chaptify tests/
       - name: Codecov
