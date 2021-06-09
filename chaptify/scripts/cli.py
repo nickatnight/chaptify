@@ -59,7 +59,7 @@ def main(url: str, append: str):
         return
 
     title = append or fetch_data.get("title", "")
-    playlist_data = chaptify.get_or_create_playlist(title, url)
+    created, playlist_data = chaptify.get_or_create_playlist(title, url)
 
     data.update(**process_data, **playlist_data)
 
@@ -74,8 +74,8 @@ def main(url: str, append: str):
     if click.confirm("Do you want to still continue?"):
         _go(data, append, chaptify)
     else:
-        # delete playlist only if it was newly created
-        if not append:
+        # only delete playlist if it was newly created
+        if not append and created:
             chaptify.current_user_unfollow_playlist(playlist_data.get("id"))
 
 

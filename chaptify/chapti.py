@@ -1,4 +1,4 @@
-from typing import Dict, Union, List
+from typing import Dict, Union, List, Tuple
 
 from emoji import emojize
 from spotipy import Spotify
@@ -72,24 +72,36 @@ class Chaptify:
         :param name:                    name to check
         :return:                        playlist data if exists, None otherwise
         """
-        playlists = self.sp.current_user_playlists().get("items", list())
-        for playlist in playlists:
-            if name == playlist.get("name"):
-                return playlist
+        limit = 50
+        offset = 0
+        playlists = self.sp.current_user_playlists(limit=limit, offset=offset).get(
+            "items", list()
+        )
+
+        while playlists:
+            for playlist in playlists:
+                if name == playlist.get("name"):
+                    return playlist
+
+            offset += limit
+            playlists = self.sp.current_user_playlists(limit=limit, offset=offset).get(
+                "items", list()
+            )
+
         return None
 
-    def get_or_create_playlist(self, title: str, url: str) -> Dict:
+    def get_or_create_playlist(self, title: str, url: str) -> Tuple[bool, Dict]:
         """
         :param title:                   playlist title
-        :return:                        playlist if exists, newly created playlist otherwise
+        :return:                        (bool if created, playlist)
         """
-        # TODO: add flag if created
         playlist = self.check_if_playlist_exists(title)
         if playlist:
-            return playlist
+            return False, playlist
 
         msg = DEFAULT_DESCRIPTION.format(url=url)
-        return self.sp.user_playlist_create(
+
+        return True, self.sp.user_playlist_create(
             self.user_id(), title, description=emojize(msg, variant="emoji_type")
         )
 
