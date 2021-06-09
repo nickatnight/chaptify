@@ -29,8 +29,9 @@ jobs:
       - name: run coverage
         run: poetry run pytest --cov-report xml --cov=chaptify tests/
         env:
-          CLIENT_ID: test
-          CLIENT_SECRET: test
+          SPOTIPY_CLIENT_ID: test
+          SPOTIPY_CLIENT_SECRET: test
+          SPOTIPY_REDIRECT_URI: test
       - name: Codecov
         uses: codecov/codecov-action@v1
         with:
