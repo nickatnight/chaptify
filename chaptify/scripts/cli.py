@@ -1,5 +1,5 @@
 import os
-from typing import Dict
+from typing import Dict, Optional
 
 import click
 from emoji import emojize
@@ -46,7 +46,7 @@ def _go(data: Dict, append: str, ch: Chaptify) -> None:
 @click.command()
 @click.argument("url")
 @click.option("-a", "--append", help="Append to a playlist (by name).")
-def main(url: str, append: str):
+def main(url: str, append: Optional[str]):
     """Youtube video link URL"""
     data = dict()
     chaptify = Chaptify(CLIENT_ID, CLIENT_SECRET)

@@ -111,12 +111,14 @@ class Chaptify:
         :param url:                     youtube video url
         :return:                        success/error, youtube-dl data or error message
         """
+        info_dict = dict()
         ydl_opts = {"noplaylist": True, "quiet": True, "no_warnings": True}
+
         try:
             with YoutubeDL(ydl_opts) as ydl:
                 info_dict = ydl.extract_info(url, download=False)
         except Exception:
-            return None
+            pass
 
         return info_dict
 
@@ -148,4 +150,5 @@ class Chaptify:
                     missing_tracks.append(track)
 
             pbar.set_description("Finished.")
+
         return dict(missing_tracks=missing_tracks, tracks_to_add=tracks_to_add)
