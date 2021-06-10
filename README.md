@@ -12,7 +12,7 @@
 </p>
 
 # chaptify :closed_book: :speaker:
-A simple cli to convert audio from [chapter](https://support.google.com/youtube/answer/9884579?hl=en) enabled YouTube videos to your Spotify playlist
+A simple cli to convert audio from [chapter](https://support.google.com/youtube/answer/9884579?hl=en) enabled YouTube videos, to Spotify playlists
 
 ## Reason?
 I needed an automated process to transfer 80s synthwave mixes I listen to from [YouTube](https://www.youtube.com/watch?v=2b9AqJimM-0), most of which were chapter enabled (new video feature from YT), to Spotify playlists.
@@ -24,16 +24,32 @@ This package relies on `spotipy`, a lightweight python wrapper for Spotify api. 
 2. export ENV vars
     ```shell
     $ export SPOTIFY_CLIENT_SECRET=<some_secret>
-    $ export SPOTIFY_CLIENT_ID=<some_secret>
+    $ export SPOTIFY_CLIENT_ID=<some_id>
+    $ export SPOTIFY_REDIRECT_URI=<some_uri>  # optional...defaults to http://localhost:8321
     ```
 3. install in editable mode `$ pip install -e .`
 4. run `$ chaptify https://www.youtube.com/watch\?v\=Pz1a9MM-Vn4`
 
-<!-- https://imgur.com/a/9BDoKt5 -->
-![alt text](https://i.imgur.com/NqjM3SD.gif "chaptify")
+### Note
+* SPOTIFY_REDIRECT_URI environment variable must match the redirect URI added to your application in your [Dashboard](https://developer.spotify.com/dashboard/applications) , this URI does not need to be accessible
+* on first use, `spotipy` will spin up a temporary web server on whatever port is specified above to automatically handle the redirect
+
+## Usage
+```bash
+Usage: chaptify [OPTIONS] URL
+
+  Youtube video link URL
+
+Options:
+  -a, --append TEXT  Append to a playlist (by name).
+  --help             Show this message and exit.
+```
+
+<!-- https://imgur.com/a/BYHqmhi -->
+![alt text](https://i.imgur.com/jVpwvYX.gif "chaptify")
 
 ## Limitations
 * obviously, this tool is limited to whats available on Spotify
 * only supports US market currently
-* works best with title tracks with variations of "name - artist"
+* works best with title tracks with variations of "name - artist" eg Rosentwig - Journey
 * there is no fancy algorithm or deep learning technique when using spotify search, just fetch me the first hit

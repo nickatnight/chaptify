@@ -11,14 +11,16 @@ from ..const import (
     ERROR_FETCH_MSG,
     SUCESSFUL_PLAYLIST,
     FOUND_ALL_TRACKS,
+    SPOTIFY_REDIRECT_URI,
 )
 
 
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
+REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI", SPOTIFY_REDIRECT_URI)
 
 
-def _go(data: Dict, append: str, ch: Chaptify) -> None:
+def run(data: Dict, append: str, ch: Chaptify) -> None:
     """helper method for writing to stdout and playlist handling
 
     :param data:                        processing data
@@ -49,7 +51,9 @@ def _go(data: Dict, append: str, ch: Chaptify) -> None:
 def main(url: str, append: Optional[str]):
     """Youtube video link URL"""
     data = dict()
-    chaptify = Chaptify(CLIENT_ID, CLIENT_SECRET)
+    chaptify = Chaptify(
+        client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI
+    )
     fetch_data = chaptify.fetch_youtube(url)
     process_data = chaptify.process_youtube(fetch_data)
     msg = FOUND_ALL_TRACKS
@@ -72,7 +76,7 @@ def main(url: str, append: Optional[str]):
     # only proceed after user confirmation
     click.echo(emojize(msg))
     if click.confirm("Do you want to still continue?"):
-        _go(data, append, chaptify)
+        run(data, append, chaptify)
     else:
         # only delete playlist if it was newly created
         if not append and created:

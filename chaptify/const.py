@@ -29,7 +29,7 @@ FOUND_ALL_TRACKS = """
 :check_mark: Great, found all tracks!
 """
 
-REDIRECT_URI = "http://localhost"
+SPOTIFY_REDIRECT_URI = "http://localhost:8321"
 
 
 class ScopeTypes:

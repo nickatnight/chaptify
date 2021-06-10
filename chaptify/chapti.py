@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 from tqdm import tqdm
 from youtube_dl import YoutubeDL
 
-from .const import DEFAULT_DESCRIPTION, REDIRECT_URI, ScopeTypes
+from .const import DEFAULT_DESCRIPTION, SPOTIFY_REDIRECT_URI, ScopeTypes
 from .utils import clean_line
 
 
@@ -15,13 +15,13 @@ class Chaptify:
         self,
         client_id: str,
         client_secret: str,
-        redirect_uri: str = None,
+        redirect_uri: str = SPOTIFY_REDIRECT_URI,
         scope: str = ScopeTypes.PLAYLIST_MODIFY_PUBLIC,
     ):
         auth_manager = SpotifyOAuth(
             client_id=client_id,
             client_secret=client_secret,
-            redirect_uri=redirect_uri or REDIRECT_URI,
+            redirect_uri=redirect_uri,
             scope=scope,
         )
         self.sp = Spotify(auth_manager=auth_manager)
