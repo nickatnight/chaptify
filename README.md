@@ -12,7 +12,7 @@
 </p>
 
 # chaptify :closed_book: :speaker:
-A simple cli to convert audio from [chapter](https://support.google.com/youtube/answer/9884579?hl=en) enabled YouTube videos, to Spotify playlists
+A simple cli to create Spotify playlists from the audio of [chapter](https://support.google.com/youtube/answer/9884579?hl=en) enabled YouTube videos
 
 ## Reason?
 I needed an automated process to transfer 80s synthwave mixes I listen to from [YouTube](https://www.youtube.com/watch?v=2b9AqJimM-0), most of which were chapter enabled (new video feature from YT), to Spotify playlists.
@@ -32,7 +32,7 @@ This package relies on `spotipy`, a lightweight python wrapper for Spotify api. 
 
 ### Note
 * SPOTIFY_REDIRECT_URI environment variable must match the redirect URI added to your application in your [Dashboard](https://developer.spotify.com/dashboard/applications) , this URI does not need to be accessible
-* on first use, `spotipy` will spin up a temporary web server on whatever port is specified above to automatically handle the redirect
+* on first use, `spotipy` will spin up a temporary web server on whatever port is specified above to automatically handle the oauth redirect
 
 ## Usage
 ```bash
@@ -50,6 +50,6 @@ Options:
 
 ## Limitations
 * obviously, this tool is limited to whats available on Spotify
-* only supports US market currently
+* only supports US market
 * works best with title tracks with variations of "name - artist" eg Rosentwig - Journey
 * there is no fancy algorithm or deep learning technique when using spotify search, just fetch me the first hit

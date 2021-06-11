@@ -1,7 +1,9 @@
-from unittest import mock
+from unittest import mock, TestCase
 
 from click.testing import CliRunner
 
+from chaptify import __version__
+from chaptify.const import ERROR_FETCH_MSG
 from chaptify.scripts.cli import main
 
 
@@ -22,35 +24,65 @@ YTDL = {
         }
     ],
 }
+VIDEO_URL = "https://www.youtube.com/watch?v=2b9AqJimM-0"
+
+
+def test_version():
+    assert __version__ == "0.1.0"
 
 
 @mock.patch("chaptify.chapti.Spotify")
 @mock.patch("chaptify.chapti.YoutubeDL.extract_info")
-def test_cli_no_continue(mock_ytdl, mock_spotify):
-    mock_spotify.return_value.current_user_playlists.return_value = (
-        CURRENT_USER_PLAYLIST
-    )
-    mock_spotify.return_value.user_playlist_create.return_value = USER_PLAYLIST_CREATE
-    mock_spotify.return_value.search.return_value = SEARCH
-    mock_ytdl.return_value = YTDL
+class ChaptifyTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
 
-    runner = CliRunner()
-    result = runner.invoke(main, ["http://clirunner.com"], input="n\n")
-    assert result.exit_code == 0
-    assert "Do you want to still continue?" in result.output
+        self.runner = CliRunner()
 
+    def test_cli_no_continue(self, mock_ytdl, mock_spotify):
+        mock_spotify.return_value.current_user_playlists.return_value = (
+            CURRENT_USER_PLAYLIST
+        )
+        mock_spotify.return_value.user_playlist_create.return_value = (
+            USER_PLAYLIST_CREATE
+        )
+        mock_spotify.return_value.search.return_value = SEARCH
+        mock_ytdl.return_value = YTDL
 
-@mock.patch("chaptify.chapti.Spotify")
-@mock.patch("chaptify.chapti.YoutubeDL.extract_info")
-def test_cli_continue(mock_ytdl, mock_spotify):
-    mock_spotify.return_value.current_user_playlists.return_value = (
-        CURRENT_USER_PLAYLIST
-    )
-    mock_spotify.return_value.user_playlist_create.return_value = USER_PLAYLIST_CREATE
-    mock_spotify.return_value.search.return_value = SEARCH
-    mock_ytdl.return_value = YTDL
+        result = self.runner.invoke(main, [VIDEO_URL], input="n\n")
+        self.assertTrue(result.exit_code == 0)
+        self.assertTrue("Do you want to still continue?" in result.output)
 
-    runner = CliRunner()
-    result = runner.invoke(main, ["http://clirunner.com"], input="y\n")
-    assert result.exit_code == 0
-    assert "Can be viewed here:\n\ntest.link" in result.output
+    def test_cli_continue(self, mock_ytdl, mock_spotify):
+        mock_spotify.return_value.current_user_playlists.return_value = (
+            CURRENT_USER_PLAYLIST
+        )
+        mock_spotify.return_value.user_playlist_create.return_value = (
+            USER_PLAYLIST_CREATE
+        )
+        mock_spotify.return_value.search.return_value = SEARCH
+        mock_ytdl.return_value = YTDL
+
+        result = self.runner.invoke(main, [VIDEO_URL], input="y\n")
+        self.assertTrue(result.exit_code == 0)
+        self.assertTrue("Can be viewed here:\n\ntest.link" in result.output)
+
+    def test_no_youtube_data_output(self, mock_ytdl, mock_spotify):
+        mock_ytdl.return_value = dict()
+        result = self.runner.invoke(main, [VIDEO_URL], input="n\n")
+        self.assertTrue(ERROR_FETCH_MSG in result.output)
+
+    def test_missing_tracks_output(self, mock_ytdl, mock_spotify):
+        mock_ytdl.return_value = YTDL
+        mock_spotify.return_value.search.return_value = dict()
+        mock_spotify.return_value.current_user_playlists.return_value = (
+            CURRENT_USER_PLAYLIST
+        )
+        mock_spotify.return_value.user_playlist_create.return_value = (
+            USER_PLAYLIST_CREATE
+        )
+
+        result = self.runner.invoke(main, [VIDEO_URL], input="n\n")
+        self.assertTrue(
+            "The following 1 track(s) will not added to the playlist:" in result.output
+        )
