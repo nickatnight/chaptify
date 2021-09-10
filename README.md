@@ -59,7 +59,10 @@ This project uses [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwin
 4. flake8 `poetry run flake8`
 5. test `poetry run pytest --cov=chaptify tests/`
 6. build sdist `poetry build --format sdist`
-7. create new setup.py `tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py`
+7. create new setup.py
+    ```shell
+    $ tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py
+    ```
 
 ## Limitations
 * obviously, this tool is limited to whats available on Spotify
