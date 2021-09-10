@@ -51,9 +51,7 @@ class ChaptifyTestCase(TestCase):
             CURRENT_USER_PLAYLIST,
             {"items": list()},
         )
-        mock_spotify.return_value.user_playlist_create.return_value = (
-            USER_PLAYLIST_CREATE
-        )
+        mock_spotify.return_value.user_playlist_create.return_value = USER_PLAYLIST_CREATE
         mock_spotify.return_value.search.return_value = SEARCH
         mock_ytdl.return_value = YTDL
 
@@ -66,9 +64,7 @@ class ChaptifyTestCase(TestCase):
             CURRENT_USER_PLAYLIST,
             {"items": list()},
         )
-        mock_spotify.return_value.user_playlist_create.return_value = (
-            USER_PLAYLIST_CREATE
-        )
+        mock_spotify.return_value.user_playlist_create.return_value = USER_PLAYLIST_CREATE
         mock_spotify.return_value.search.return_value = SEARCH
         mock_ytdl.return_value = YTDL
 
@@ -88,11 +84,7 @@ class ChaptifyTestCase(TestCase):
             CURRENT_USER_PLAYLIST,
             {"items": list()},
         )
-        mock_spotify.return_value.user_playlist_create.return_value = (
-            USER_PLAYLIST_CREATE
-        )
+        mock_spotify.return_value.user_playlist_create.return_value = USER_PLAYLIST_CREATE
 
         result = self.runner.invoke(main, [VIDEO_URL], input="n\n")
-        self.assertTrue(
-            "The following 1 track(s) will not added to the playlist:" in result.output
-        )
+        self.assertTrue("The following 1 track(s) will not added to the playlist:" in result.output)

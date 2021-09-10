@@ -51,9 +51,7 @@ def run(data: Dict, append: str, ch: Chaptify) -> None:
 def main(url: str, append: Optional[str]):
     """Youtube video link URL"""
     data = dict()
-    chaptify = Chaptify(
-        client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI
-    )
+    chaptify = Chaptify(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI)
     fetch_data = chaptify.fetch_youtube(url)
     process_data = chaptify.process_youtube(fetch_data)
     msg = FOUND_ALL_TRACKS

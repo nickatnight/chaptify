@@ -17,7 +17,7 @@ A simple cli to create Spotify playlists from the audio of [chapter](https://sup
 ## Reason?
 I needed an automated process to transfer 80s synthwave mixes I listen to from [YouTube](https://www.youtube.com/watch?v=2b9AqJimM-0), most of which were chapter enabled (new video feature from YT), to Spotify playlists.
 
-## Install (edit mode only) Python 3.9+
+## Install (edit mode) Python 3.9+
 This package relies on `spotipy`, a lightweight python wrapper for Spotify api. See their [docs](https://spotipy.readthedocs.io/en/latest/) for installation or Spotify [developer](https://developer.spotify.com/documentation/general/guides/) guide for obtaining api keys
 
 1. clone this repo `$ git clone git@github.com:nickatnight/chaptify.git` and `cd chaptify`
@@ -52,12 +52,14 @@ Options:
 
 
 ## Development
-This project uses [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) to manage the dev environment.  Once installed:
+This project uses [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) to manage dev environment.  Once installed:
 1. follow steps 1-2 from above
 2. install packages with `poetry install`
 3. black `poetry run black .`
 4. flake8 `poetry run flake8`
 5. test `poetry run pytest --cov=chaptify tests/`
+6. build sdist `poetry build --format sdist`
+7. create new setup.py `tar -xvf dist/*-`poetry version -s`.tar.gz -O '*/setup.py' > setup.py`
 
 ## Limitations
 * obviously, this tool is limited to whats available on Spotify

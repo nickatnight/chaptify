@@ -50,9 +50,7 @@ class Chaptify:
         """delete playlist by id"""
         self.sp.current_user_unfollow_playlist(playlist_id)
 
-    def playlist_replace_items(
-        self, playlist_id: str, tracks_to_add: List[str]
-    ) -> None:
+    def playlist_replace_items(self, playlist_id: str, tracks_to_add: List[str]) -> None:
         """replace all items in playlist with new ones
 
         :param playlist_id:             id of playlist
@@ -74,9 +72,7 @@ class Chaptify:
         """
         limit = 50
         offset = 0
-        playlists = self.sp.current_user_playlists(limit=limit, offset=offset).get(
-            "items", list()
-        )
+        playlists = self.sp.current_user_playlists(limit=limit, offset=offset).get("items", list())
 
         while playlists:
             for playlist in playlists:
@@ -84,9 +80,7 @@ class Chaptify:
                     return playlist
 
             offset += limit
-            playlists = self.sp.current_user_playlists(limit=limit, offset=offset).get(
-                "items", list()
-            )
+            playlists = self.sp.current_user_playlists(limit=limit, offset=offset).get("items", list())
 
         return None
 
@@ -138,9 +132,7 @@ class Chaptify:
         with tqdm(iterable=chapters) as pbar:
             for item in pbar:
                 track = clean_line(item)
-                track_search = " ".join(
-                    track.split("-")
-                ).lower()  # dumb down for simplicity
+                track_search = " ".join(track.split("-")).lower()  # dumb down for simplicity
                 pbar.set_description(f"fetching '{track}'...")
 
                 track_id = self.search(track_search)
