@@ -149,6 +149,4 @@ class Chaptify:
                 else:
                     missing_tracks.append(track)
 
-            pbar.set_description("Finished.")
-
         return dict(missing_tracks=missing_tracks, tracks_to_add=tracks_to_add)

@@ -7,7 +7,14 @@ from chaptify.const import ERROR_FETCH_MSG
 from chaptify.scripts.cli import main
 
 
-CURRENT_USER_PLAYLIST = {"items": []}
+CURRENT_USER_PLAYLIST = {
+    "items": [
+        {
+            "id": "37i9dQZF1E8CaQuNr838oC",
+            "name": "test playlist",
+        },
+    ]
+}
 USER_PLAYLIST_CREATE = {
     "name": "Hey Julie",
     "id": "1234asdf",
@@ -40,8 +47,9 @@ class ChaptifyTestCase(TestCase):
         self.runner = CliRunner()
 
     def test_cli_no_continue(self, mock_ytdl, mock_spotify):
-        mock_spotify.return_value.current_user_playlists.return_value = (
-            CURRENT_USER_PLAYLIST
+        mock_spotify.return_value.current_user_playlists.side_effect = (
+            CURRENT_USER_PLAYLIST,
+            {"items": list()},
         )
         mock_spotify.return_value.user_playlist_create.return_value = (
             USER_PLAYLIST_CREATE
@@ -54,8 +62,9 @@ class ChaptifyTestCase(TestCase):
         self.assertTrue("Do you want to still continue?" in result.output)
 
     def test_cli_continue(self, mock_ytdl, mock_spotify):
-        mock_spotify.return_value.current_user_playlists.return_value = (
-            CURRENT_USER_PLAYLIST
+        mock_spotify.return_value.current_user_playlists.side_effect = (
+            CURRENT_USER_PLAYLIST,
+            {"items": list()},
         )
         mock_spotify.return_value.user_playlist_create.return_value = (
             USER_PLAYLIST_CREATE
@@ -75,8 +84,9 @@ class ChaptifyTestCase(TestCase):
     def test_missing_tracks_output(self, mock_ytdl, mock_spotify):
         mock_ytdl.return_value = YTDL
         mock_spotify.return_value.search.return_value = dict()
-        mock_spotify.return_value.current_user_playlists.return_value = (
-            CURRENT_USER_PLAYLIST
+        mock_spotify.return_value.current_user_playlists.side_effect = (
+            CURRENT_USER_PLAYLIST,
+            {"items": list()},
         )
         mock_spotify.return_value.user_playlist_create.return_value = (
             USER_PLAYLIST_CREATE
