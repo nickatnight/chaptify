@@ -40,7 +40,7 @@ def test_version():
 
 @mock.patch("chaptify.chapti.Spotify")
 @mock.patch("chaptify.chapti.YoutubeDL.extract_info")
-class ChaptifyTestCase(TestCase):
+class CliTestCase(TestCase):
     def setUp(self):
         super().setUp()
 
