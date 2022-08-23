@@ -69,3 +69,6 @@ This project uses [Poetry](https://python-poetry.org/docs/#osx--linux--bashonwin
 * only supports US market
 * works best with title tracks with variations of "name - artist" eg Rosentwig - Journey
 * there is no fancy algorithm or deep learning technique when using spotify search, just fetch me the first hit
+
+## TODO
+Integrate with new libs
