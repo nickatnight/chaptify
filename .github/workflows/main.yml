@@ -2,6 +2,8 @@ name: lint and test
 
 on:
   push:
+    tags:        
+      - '*'
     branches:
       - master
       - develop
